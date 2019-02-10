@@ -152,13 +152,20 @@ export class Game {
   }
 
   private askQuestion(): void {
-    if (this.currentCategory() == "Pop") console.log(this.popQuestions.shift());
-    if (this.currentCategory() == "Science")
-      console.log(this.scienceQuestions.shift());
-    if (this.currentCategory() == "Sports")
-      console.log(this.sportsQuestions.shift());
-    if (this.currentCategory() == "Rock")
-      console.log(this.rockQuestions.shift());
+    switch (this.currentCategory()) {
+      case "Pop":
+        console.log(this.popQuestions.shift());
+        break;
+      case "Science":
+        console.log(this.scienceQuestions.shift());
+        break;
+      case "Sports":
+        console.log(this.sportsQuestions.shift());
+        break;
+      case "Rock":
+        console.log(this.rockQuestions.shift());
+        break;
+    }
   }
 
   private createRockQuestion(index: number): string {
