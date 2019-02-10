@@ -1,3 +1,5 @@
+import { isPropertyAccessOrQualifiedName } from "typescript";
+
 export class Game {
   private players: Array<string> = [];
   private places: Array<number> = [];
@@ -18,6 +20,10 @@ export class Game {
       this.sportsQuestions.push("Sports Question " + i);
       this.rockQuestions.push(this.createRockQuestion(i));
     }
+  }
+
+  public getCurrentPlayer(): number {
+    return this.currentPlayer;
   }
 
   public getInPenaltyBox(): Array<boolean> {
@@ -52,7 +58,7 @@ export class Game {
     console.log(this.players[this.currentPlayer] + " is the current player");
     console.log("They have rolled a " + roll);
 
-    if (this.inPenaltyBox[this.currentPlayer]) {
+    if (this.isCurrentPlayerInPenaltyBox()) {
       const isRollOdd = roll % 2 != 0;
       const negation = isRollOdd ? "" : "not";
       console.log(
@@ -84,45 +90,36 @@ export class Game {
   }
 
   public wasCorrectlyAnswered(): boolean {
-    if (this.inPenaltyBox[this.currentPlayer]) {
+    if (this.isCurrentPlayerInPenaltyBox()) {
       if (this.isGettingOutOfPenaltyBox) {
-        console.log("Answer was correct!!!!");
-        this.purses[this.currentPlayer] += 1;
-        console.log(
-          this.players[this.currentPlayer] +
-            " now has " +
-            this.purses[this.currentPlayer] +
-            " Gold Coins."
-        );
-
-        var winner = this.didPlayerWin();
-        this.currentPlayer += 1;
-        if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
-
-        return winner;
+        return this.playerDidAnswerQuestion();
       } else {
         this.currentPlayer += 1;
         if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
-        return true;
+        return false;
       }
     } else {
-      console.log("Answer was correct!!!!");
-
-      this.purses[this.currentPlayer] += 1;
-      console.log(
-        this.players[this.currentPlayer] +
-          " now has " +
-          this.purses[this.currentPlayer] +
-          " Gold Coins."
-      );
-
-      var winner = this.didPlayerWin();
-
-      this.currentPlayer += 1;
-      if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
-
-      return winner;
+      return this.playerDidAnswerQuestion();
     }
+  }
+
+  private playerDidAnswerQuestion(): boolean {
+    console.log("Answer was correct!!!!");
+
+    this.purses[this.currentPlayer] += 1;
+    console.log(
+      this.players[this.currentPlayer] +
+        " now has " +
+        this.purses[this.currentPlayer] +
+        " Gold Coins."
+    );
+
+    var winner = this.didPlayerWin();
+
+    this.currentPlayer += 1;
+    if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
+
+    return winner;
   }
 
   private updateCurrentPlayersPlaceAndAskQuestion(roll: number): void {
@@ -174,10 +171,14 @@ export class Game {
   }
 
   private didPlayerWin(): boolean {
-    return !(this.purses[this.currentPlayer] == 6);
+    return this.purses[this.currentPlayer] == 6;
   }
 
   private howManyPlayers(): number {
     return this.players.length;
+  }
+
+  private isCurrentPlayerInPenaltyBox(): boolean {
+    return this.inPenaltyBox[this.currentPlayer];
   }
 }

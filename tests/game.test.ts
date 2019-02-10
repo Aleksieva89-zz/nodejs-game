@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { Game } from "../src/game";
 import { describe, it } from "mocha";
 import { GameRunner } from "../src/game-runner";
+import { getEmitHelpers } from "typescript";
 
 describe("The test environment", () => {
   it("Test add player players content", () => {
@@ -47,5 +48,57 @@ describe("The test environment", () => {
 
   it("should access game", function() {
     expect(GameRunner).to.not.be.undefined;
+  });
+
+  it("Test wasCorrectlyAnswered player not in penalty box", function() {
+    const game = new Game();
+    game.addPlayer("Test player");
+    game.addPlayer("Test player 2");
+
+    expect(game.getCurrentPlayer()).equals(0);
+
+    expect(game.wasCorrectlyAnswered()).equals(false);
+    expect(game.getPurses()[0]).equals(1);
+    expect(game.getPurses()[1]).equals(0);
+    expect(game.getCurrentPlayer()).equals(1);
+
+    expect(game.wasCorrectlyAnswered()).equals(false);
+    expect(game.getPurses()[0]).equals(1);
+    expect(game.getPurses()[1]).equals(1);
+    expect(game.getCurrentPlayer()).equals(0);
+  });
+
+  it("Test wasCorrectlyAnswered player in penalty box and not geting out", function() {
+    const game = new Game();
+    game.addPlayer("Test player");
+    game.addPlayer("Test player 2");
+
+    game.wrongAnswer();
+
+    expect(game.getCurrentPlayer()).equals(1);
+
+    expect(game.wasCorrectlyAnswered()).equals(false);
+
+    expect(game.getCurrentPlayer()).equals(0);
+
+    expect(game.wasCorrectlyAnswered()).equals(false);
+  });
+
+  it("Test wasCorrectlyAnswered player in penalty box and geting out", function() {
+    const game = new Game();
+    game.addPlayer("Test player");
+
+    game.wrongAnswer();
+
+    game.roll(1);
+
+    expect(game.wasCorrectlyAnswered()).equals(false);
+    expect(game.getPurses()[0]).equals(1);
+
+    expect(game.wasCorrectlyAnswered()).equals(false);
+    expect(game.wasCorrectlyAnswered()).equals(false);
+    expect(game.wasCorrectlyAnswered()).equals(false);
+    expect(game.wasCorrectlyAnswered()).equals(false);
+    expect(game.wasCorrectlyAnswered()).equals(true);
   });
 });
