@@ -2,7 +2,6 @@ import { expect } from "chai";
 import { Game } from "../src/game";
 import { describe, it } from "mocha";
 import { GameRunner } from "../src/game-runner";
-import { getEmitHelpers } from "typescript";
 
 describe("The test environment", () => {
   it("Test add player players content", () => {
@@ -57,12 +56,12 @@ describe("The test environment", () => {
 
     expect(game.getCurrentPlayer()).equals(0);
 
-    expect(game.wasCorrectlyAnswered()).equals(false);
+    expect(game.wasCorrectlyAnswered()).equals(true);
     expect(game.getPurses()[0]).equals(1);
     expect(game.getPurses()[1]).equals(0);
     expect(game.getCurrentPlayer()).equals(1);
 
-    expect(game.wasCorrectlyAnswered()).equals(false);
+    expect(game.wasCorrectlyAnswered()).equals(true);
     expect(game.getPurses()[0]).equals(1);
     expect(game.getPurses()[1]).equals(1);
     expect(game.getCurrentPlayer()).equals(0);
@@ -77,7 +76,7 @@ describe("The test environment", () => {
 
     expect(game.getCurrentPlayer()).equals(1);
 
-    expect(game.wasCorrectlyAnswered()).equals(false);
+    expect(game.wasCorrectlyAnswered()).equals(true);
 
     expect(game.getCurrentPlayer()).equals(0);
 
@@ -92,13 +91,13 @@ describe("The test environment", () => {
 
     game.roll(1);
 
-    expect(game.wasCorrectlyAnswered()).equals(false);
+    expect(game.wasCorrectlyAnswered()).equals(true);
     expect(game.getPurses()[0]).equals(1);
 
-    expect(game.wasCorrectlyAnswered()).equals(false);
-    expect(game.wasCorrectlyAnswered()).equals(false);
-    expect(game.wasCorrectlyAnswered()).equals(false);
-    expect(game.wasCorrectlyAnswered()).equals(false);
     expect(game.wasCorrectlyAnswered()).equals(true);
+    expect(game.wasCorrectlyAnswered()).equals(true);
+    expect(game.wasCorrectlyAnswered()).equals(true);
+    expect(game.wasCorrectlyAnswered()).equals(true);
+    expect(game.wasCorrectlyAnswered()).equals(false);
   });
 });

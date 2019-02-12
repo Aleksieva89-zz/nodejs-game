@@ -171,7 +171,7 @@ export class Game {
   }
 
   private didPlayerWin(): boolean {
-    return this.purses[this.currentPlayer] == 6;
+    return this.purses[this.currentPlayer] != 6;
   }
 
   private howManyPlayers(): number {
